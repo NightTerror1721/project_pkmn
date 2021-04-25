@@ -30,6 +30,9 @@
     <ClCompile Include="src\resource.cpp">
       <Filter>Archivos de origen\support</Filter>
     </ClCompile>
+    <ClCompile Include="src\common.cpp">
+      <Filter>Archivos de origen\support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common.h">

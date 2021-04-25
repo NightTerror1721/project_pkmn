@@ -10,7 +10,7 @@ namespace utils
 	class JsonException : public std::exception
 	{
 		inline JsonException(const char* msg) : exception{ msg } {}
-		inline JsonException(const std::string& msg) : exception{ msg.c_str(); }
+		inline JsonException(const std::string& msg) : exception{ msg.c_str() } {}
 	};
 
 	class JsonSerializable

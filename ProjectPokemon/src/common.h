@@ -131,3 +131,140 @@ namespace utils
 
 	inline Path operator"" _p(const char* str, Size size) { return String{ str, size }; }
 }
+
+class UniqueId
+{
+private:
+	Int64 _id = 0;
+
+public:
+	UniqueId() = default;
+	UniqueId(const UniqueId&) = default;
+	~UniqueId() = default;
+
+	UniqueId& operator= (const UniqueId&) = default;
+
+	bool operator== (const UniqueId&) const = default;
+	auto operator<=> (const UniqueId&) const = default;
+
+	inline operator bool() const { return _id; }
+	inline bool operator! () const { return !_id; }
+
+	static UniqueId make();
+
+	friend inline std::ostream& operator<< (std::ostream& left, const UniqueId& right) { return left << right._id; }
+	friend inline std::istream& operator>> (std::istream& left, UniqueId& right) { return left >> right._id; }
+};
+
+template<typename _Ty>
+class Reference
+{
+private:
+	struct Data
+	{
+		_Ty* value;
+		Size count;
+
+	public:
+		inline Data() : value{ nullptr }, count{ 0 } {}
+		inline Data(_Ty* value) : value{ value }, count{ value ? 1 : 0 } {}
+		~Data()
+		{
+			if (value)
+				delete value;
+		}
+
+		Data(const Data&) = delete;
+		Data& operator= (const Data&) = delete;
+
+		inline void increase() { ++count; }
+		void decrease()
+		{
+			if (count > 1)
+				--count;
+			else clear();
+		}
+		void clear()
+		{
+			if (value)
+				delete value;
+			count = 0;
+			value = nullptr;
+		}
+
+		inline bool empty() const { return !value; }
+	};
+
+private:
+	Data* _data;
+	_Ty* _value;
+
+private:
+	inline void _destroy()
+	{
+		if (_data)
+		{
+			_data->decrease();
+			if (_data->empty())
+				delete _data;
+		}
+	}
+
+public:
+	inline Reference() : _data{}, _value{ nullptr } {}
+	inline Reference(decltype(nullptr)) : _data{}, _value{ nullptr } {}
+	inline Reference(_Ty* ptr) : _data{ ptr }, _value{ ptr } {}
+
+	Reference(const Reference& right) : _data{ right._data }, _value{ _data->value }
+	{
+		_data->increase();
+	}
+	Reference(Reference&& right) noexcept : _data{ right._data }
+	{
+		right._data = nullptr;
+		right._value = nullptr;
+	}
+	inline ~Reference() { _destroy(); }
+
+	Reference& operator= (decltype(nullptr))
+	{
+		_destroy();
+		_data = nullptr;
+		_value = nullptr;
+		return *this;
+	}
+
+	Reference& operator= (_Ty* ptr)
+	{
+		_destroy();
+		_data = new Data{ ptr };
+		_value = ptr;
+		return *this;
+	}
+
+	Reference& operator= (const Reference& right)
+	{
+		_destroy();
+		_data = right._data;
+		_value = _data->value;
+		_data->increase();
+		return *this;
+	}
+	Reference& operator= (Reference&& right) noexcept
+	{
+		_destroy();
+		_data = right._data;
+		_value = _data->value;
+		right._data = nullptr;
+		return *this;
+	}
+
+	inline _Ty& operator* () { return *_value; }
+	inline const _Ty& operator* () const { return *_value; }
+
+	inline _Ty* operator-> () { return _value; }
+	inline const _Ty* operator-> () const { return _value; }
+
+	inline operator bool() const { return _data; }
+	inline bool operator! () const { return !_data; }
+};
