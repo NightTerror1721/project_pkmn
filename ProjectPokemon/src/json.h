@@ -1,9 +1,6 @@
 #pragma once
 
-#include <native_json/json.hpp>
 #include "common.h"
-
-typedef nlohmann::json Json;
 
 namespace utils
 {

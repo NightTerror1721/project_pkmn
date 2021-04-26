@@ -33,6 +33,9 @@
     <ClCompile Include="src\common.cpp">
       <Filter>Archivos de origen\support</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_basics.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common.h">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="src\resource.h">
       <Filter>Archivos de encabezado\support</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_basics.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

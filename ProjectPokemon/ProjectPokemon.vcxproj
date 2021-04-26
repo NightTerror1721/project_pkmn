@@ -158,12 +158,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\common.cpp" />
+    <ClCompile Include="src\game_basics.cpp" />
     <ClCompile Include="src\json.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\resource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\common.h" />
+    <ClInclude Include="src\game_basics.h" />
     <ClInclude Include="src\json.h" />
     <ClInclude Include="src\resource.h" />
   </ItemGroup>
