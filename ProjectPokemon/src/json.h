@@ -6,6 +6,7 @@ namespace utils
 {
 	class JsonException : public std::exception
 	{
+	public:
 		inline JsonException(const char* msg) : exception{ msg } {}
 		inline JsonException(const std::string& msg) : exception{ msg.c_str() } {}
 	};
@@ -43,7 +44,7 @@ namespace utils
 	inline void write(const Path& path, const JsonSerializable& obj) { write(path, obj.serialize()); }
 	inline void write(const String& path, const JsonSerializable& obj) { write(path, obj.serialize()); }
 
-	inline bool has(const Json& json, const char& key) { return json.find(key) != json.end(); }
+	inline bool has(const Json& json, const char* key) { return json.find(key) != json.end(); }
 	inline bool has(const Json& json, const String& key) { return json.find(key) != json.end(); }
 
 	template<typename _Ty>
