@@ -68,26 +68,47 @@ public:
 	GameObjectContainer& operator= (const GameObjectContainer&) = delete;
 
 public:
-	wref<_Ty> getById(UniqueId uid)
+	wref<_Ty> getGameObjectById(UniqueId uid)
 	{
 		auto it = _objs.find(uid);
 		return it == _objs.end() ? nullptr : it->second;
 	}
 
-	void forEach(const std::function<void(wref<_Ty>)>& consumer)
+	void forEachGameObject(const std::function<void(wref<_Ty>)>& consumer)
 	{
 		for (auto& obj : _objs)
 			consumer(obj->second);
 	}
 
-	void forEach(const std::function<void(const wref<_Ty>)>& consumer) const
+	void forEachGameObject(const std::function<void(const wref<_Ty>)>& consumer) const
 	{
 		for (const auto& obj : _objs)
 			consumer(obj->second);
 	}
 
+	bool destroyGameObject(UniqueId uid)
+	{
+		auto it = _objs.find(uid);
+		if (it != _objs.end())
+		{
+			it->reset();
+			_objs.erase(it);
+			return true;
+		}
+		return false;
+	}
 
+	wref<_Ty> addGameObject(wref<_Ty> obj)
+	{
+		UniqueId uid = obj.uid();
+		auto it = _objs.find(uid);
+		if (it != _objs.end())
+			return nullptr;
 
+		//_objs[uid] = std::make_shared()
+	}
+
+public:
 	class iterator;
 	class const_iterator;
 
